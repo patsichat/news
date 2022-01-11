@@ -12,7 +12,7 @@ protocol DetailViewControllerInterface: AnyObject {
     func displayWebView(viewModel: Detail.GetWebView.ViewModel)
 }
 
-class DetailViewController: UIViewController, DetailViewControllerInterface{
+class DetailViewController: UIViewController, DetailViewControllerInterface {
 
     var interactor: DetailInteractorInterface!
     var webView: WKWebView!
