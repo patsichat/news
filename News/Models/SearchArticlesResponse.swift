@@ -13,6 +13,12 @@ struct SearchArticlesResponse: Codable {
     struct Article: Codable {
         let headline: Headline
         let abstract: String
+        let url: String
+
+        enum CodingKeys: String, CodingKey {
+            case headline, abstract
+            case url = "web_url"
+        }
     }
     struct Headline: Codable {
         let main: String

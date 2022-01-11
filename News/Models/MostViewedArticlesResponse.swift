@@ -11,5 +11,6 @@ struct MostViewedArticlesResponse: Codable {
         let title: String
         let abstract: String
         let section: String
+        let url: String
     }
 }
