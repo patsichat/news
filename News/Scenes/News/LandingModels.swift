@@ -20,10 +20,37 @@ struct Landing {
         }
         struct ViewModel {
             let content: [DisplayedArticle]
+            let sections: [String]
         }
         struct DisplayedArticle {
             let title: String
             let abstract: String
+        }
+    }
+
+    struct FilterSection {
+        struct Request {
+            let section: String?
+        }
+        struct Response {
+            let section: String?
+            let result: [MostViewedArticlesResponse.Article]
+        }
+        struct ViewModel {
+            let section: String
+            let content: [GetMostViewedArticles.DisplayedArticle]
+        }
+    }
+
+    struct SearchArticle {
+        struct Request {
+            let searchString: String
+        }
+        struct Response {
+            let result: [SearchArticlesResponse.Article]
+        }
+        struct ViewModel {
+            let content: [GetMostViewedArticles.DisplayedArticle]
         }
     }
 }

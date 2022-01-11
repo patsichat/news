@@ -10,5 +10,6 @@ struct MostViewedArticlesResponse: Codable {
     struct Article: Codable {
         let title: String
         let abstract: String
+        let section: String
     }
 }

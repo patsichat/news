@@ -7,6 +7,7 @@
 
 protocol NewsStoreProtocol {
     func getMostViewedArticles(_ period: Landing.GetMostViewedArticles.Request.Period,_ completion: @escaping (Result<[MostViewedArticlesResponse.Article]>) -> Void)
+    func searchActicles(_ searchString: String, _ completion: @escaping (Result<[SearchArticlesResponse.Article]>) -> Void)
 }
 
 class NewsWorker {
@@ -17,5 +18,8 @@ class NewsWorker {
     }
     func getMostViewedArticles(period: Landing.GetMostViewedArticles.Request.Period, completion: @escaping (Result<[MostViewedArticlesResponse.Article]>) -> Void) {
         store.getMostViewedArticles(period, completion)
+    }
+    func searchActicles(_ searchString: String, _ completion: @escaping (Result<[SearchArticlesResponse.Article]>) -> Void) {
+        store.searchActicles(searchString, completion)
     }
 }

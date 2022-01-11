@@ -9,6 +9,8 @@ import UIKit
 
 protocol LandingViewControllerInterface: AnyObject {
     func displayMostViewedArticles(viewModel: Landing.GetMostViewedArticles.ViewModel)
+    func displayFilterSection(viewModel: Landing.FilterSection.ViewModel)
+    func displaySearchActicle(viewModel: Landing.SearchArticle.ViewModel)
 }
 
 class LandingViewController: UIViewController, LandingViewControllerInterface {
@@ -16,9 +18,11 @@ class LandingViewController: UIViewController, LandingViewControllerInterface {
     var interactor: LandingInteractorInterface!
 
     private let refreshControl = UIRefreshControl()
-    @IBOutlet private weak var tableView: UITableView!
     @IBOutlet private weak var periodButton: UIButton!
-    private var mostViewedArticles: [Landing.GetMostViewedArticles.DisplayedArticle] = []
+    @IBOutlet private weak var sectionButton: UIButton!
+    @IBOutlet private weak var tableView: UITableView!
+    private var displayedArticles: [Landing.GetMostViewedArticles.DisplayedArticle] = []
+    private var sections: [String] = []
     private var period: Landing.GetMostViewedArticles.Request.Period = .oneDay {
         didSet {
             var title = period.rawValue + " day"
@@ -28,6 +32,7 @@ class LandingViewController: UIViewController, LandingViewControllerInterface {
             periodButton.setTitle(title, for: .normal)
         }
     }
+    private var searchText = ""
 
     override func awakeFromNib() {
       super.awakeFromNib()
@@ -44,16 +49,45 @@ class LandingViewController: UIViewController, LandingViewControllerInterface {
 
     private func getMostViewedArticles(_ period: Landing.GetMostViewedArticles.Request.Period) {
         self.period = period
-        mostViewedArticles = []
-        tableView.reloadData()
+        setFilterSection(nil)
         refreshControl.beginRefreshing()
         let request = Landing.GetMostViewedArticles.Request(period: period)
         interactor.getMostViewedArticles(request: request)
     }
+
+    private func searchArticles(_ searchString: String) {
+        guard searchText.lowercased() != searchString.lowercased() else { return }
+        searchText = searchString
+        displayedArticles = []
+        tableView.reloadData()
+        refreshControl.beginRefreshing()
+        let request = Landing.SearchArticle.Request(searchString: searchString)
+        interactor.searchActicle(request: request)
+    }
+
+    private func setFilterSection(_ section: String?) {
+        displayedArticles = []
+        tableView.reloadData()
+        let request = Landing.FilterSection.Request(section: section)
+        interactor.setFilterSection(request: request)
+    }
     
     func displayMostViewedArticles(viewModel: Landing.GetMostViewedArticles.ViewModel) {
         refreshControl.endRefreshing()
-        mostViewedArticles = viewModel.content
+        displayedArticles = viewModel.content
+        sections = viewModel.sections
+        tableView.reloadData()
+    }
+
+    func displayFilterSection(viewModel: Landing.FilterSection.ViewModel) {
+        sectionButton.setTitle(viewModel.section, for: .normal)
+        displayedArticles = viewModel.content
+        tableView.reloadData()
+    }
+
+    func displaySearchActicle(viewModel: Landing.SearchArticle.ViewModel) {
+        refreshControl.endRefreshing()
+        displayedArticles = viewModel.content
         tableView.reloadData()
     }
 
@@ -61,8 +95,21 @@ class LandingViewController: UIViewController, LandingViewControllerInterface {
         getMostViewedArticles(period)
     }
 
+    @IBAction func valueChanged(_ sender: UITextField) {
+        Debounce<String>.input(sender.text ?? "", comparedAgainst: sender.text ?? "") { [weak self] in
+            self?.periodButton.isHidden = !(sender.text ?? "").isEmpty
+            self?.sectionButton.isHidden = !(sender.text ?? "").isEmpty
+            if $0.isEmpty {
+                self?.setFilterSection(nil)
+            } else {
+                self?.searchArticles($0)
+            }
+        }
+    }
+
     @IBAction func selectPeriod() {
-        let alertController = UIAlertController(title: "Select Period", message: nil, preferredStyle: .actionSheet)
+        let alertController = UIAlertController(title: "Select Period",
+                                                message: nil, preferredStyle: .actionSheet)
         alertController.addAction(UIAlertAction(title: "1 day", style: .default) { [weak self] _ in
             self?.getMostViewedArticles(.oneDay)
         })
@@ -76,16 +123,31 @@ class LandingViewController: UIViewController, LandingViewControllerInterface {
         present(alertController, animated: true)
     }
 
+    @IBAction func selectSection() {
+        let alertController = UIAlertController(title: "Select Section",
+                                                message: nil, preferredStyle: .actionSheet)
+        alertController.addAction(UIAlertAction(title: "All", style: .default) { [weak self] _ in
+            self?.setFilterSection(nil)
+        })
+        sections.forEach { section in
+            alertController.addAction(UIAlertAction(title: section, style: .default) { [weak self] _ in
+                self?.setFilterSection(section)
+            })
+        }
+        alertController.addAction(UIAlertAction(title: "Cancel", style: .cancel, handler: nil))
+        present(alertController, animated: true)
+    }
+
 }
 
 extension LandingViewController: UITableViewDataSource {
     func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
-        return mostViewedArticles.count
+        return displayedArticles.count
     }
     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
         guard let cell = tableView.dequeueReusableCell(withIdentifier: NewsTableViewCell.identifier, for: indexPath) as? NewsTableViewCell else { return UITableViewCell() }
-        cell.textLabel?.text = mostViewedArticles[indexPath.row].title
-        cell.detailTextLabel?.text = mostViewedArticles[indexPath.row].abstract
+        cell.textLabel?.text = displayedArticles[indexPath.row].title
+        cell.detailTextLabel?.text = displayedArticles[indexPath.row].abstract
         return cell
     }
 }
