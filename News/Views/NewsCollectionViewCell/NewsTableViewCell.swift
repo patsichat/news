@@ -8,5 +8,6 @@
 import UIKit
 
 class NewsTableViewCell: UITableViewCell {
+    static let nibName = "NewsTableViewCell"
     static let identifier = "NewsTableViewCell"
 }

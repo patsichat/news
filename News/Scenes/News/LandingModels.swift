@@ -53,4 +53,17 @@ struct Landing {
             let content: [GetMostViewedArticles.DisplayedArticle]
         }
     }
+
+    struct SelectDetail {
+        struct Request {
+            let index: Int
+        }
+        struct Response {}
+        struct ViewModel {}
+    }
+
+    enum DisplayMode {
+        case mostViewed
+        case search
+    }
 }

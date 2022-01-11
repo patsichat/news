@@ -6,11 +6,13 @@
 //
 
 import UIKit
+import Alamofire
 
 protocol LandingViewControllerInterface: AnyObject {
     func displayMostViewedArticles(viewModel: Landing.GetMostViewedArticles.ViewModel)
     func displayFilterSection(viewModel: Landing.FilterSection.ViewModel)
     func displaySearchActicle(viewModel: Landing.SearchArticle.ViewModel)
+    func displaySelectDetail(viewModel: Landing.SelectDetail.ViewModel)
 }
 
 class LandingViewController: UIViewController, LandingViewControllerInterface {
@@ -32,7 +34,7 @@ class LandingViewController: UIViewController, LandingViewControllerInterface {
             periodButton.setTitle(title, for: .normal)
         }
     }
-    private var searchText = ""
+    private var searchText: String?
 
     override func awakeFromNib() {
       super.awakeFromNib()
@@ -41,7 +43,9 @@ class LandingViewController: UIViewController, LandingViewControllerInterface {
 
     override func viewDidLoad() {
         super.viewDidLoad()
-        tableView.register(UINib(nibName: "NewsTableViewCell", bundle: Bundle.main), forCellReuseIdentifier: NewsTableViewCell.identifier)
+        tableView.register(UINib(nibName: NewsTableViewCell.nibName,
+                                 bundle: Bundle.main),
+                           forCellReuseIdentifier: NewsTableViewCell.identifier)
         refreshControl.addTarget(self, action: #selector(refreshAction(_:)), for: .valueChanged)
         tableView.refreshControl = refreshControl
         getMostViewedArticles(.oneDay)
@@ -55,8 +59,10 @@ class LandingViewController: UIViewController, LandingViewControllerInterface {
         interactor.getMostViewedArticles(request: request)
     }
 
-    private func searchArticles(_ searchString: String) {
-        guard searchText.lowercased() != searchString.lowercased() else { return }
+    private func searchArticles(_ searchString: String, force: Bool = false) {
+        if (searchText ?? "").lowercased() == searchString.lowercased() && !force {
+            return
+        }
         searchText = searchString
         displayedArticles = []
         tableView.reloadData()
@@ -66,6 +72,7 @@ class LandingViewController: UIViewController, LandingViewControllerInterface {
     }
 
     private func setFilterSection(_ section: String?) {
+        searchText = nil
         displayedArticles = []
         tableView.reloadData()
         let request = Landing.FilterSection.Request(section: section)
@@ -91,10 +98,19 @@ class LandingViewController: UIViewController, LandingViewControllerInterface {
         tableView.reloadData()
     }
 
-    @objc func refreshAction(_ sender: UIRefreshControl) {
-        getMostViewedArticles(period)
+    func displaySelectDetail(viewModel: Landing.SelectDetail.ViewModel) {
+        router.navigateToDetail()
     }
 
+    @objc func refreshAction(_ sender: UIRefreshControl) {
+        if let searchText = searchText {
+            searchArticles(searchText, force: true)
+        } else {
+            getMostViewedArticles(period)
+        }
+    }
+
+    // Debouncer when typing search
     @IBAction func valueChanged(_ sender: UITextField) {
         Debounce<String>.input(sender.text ?? "", comparedAgainst: sender.text ?? "") { [weak self] in
             self?.periodButton.isHidden = !(sender.text ?? "").isEmpty
@@ -107,6 +123,7 @@ class LandingViewController: UIViewController, LandingViewControllerInterface {
         }
     }
 
+    // Send period to API
     @IBAction func selectPeriod() {
         let alertController = UIAlertController(title: "Select Period",
                                                 message: nil, preferredStyle: .actionSheet)
@@ -123,6 +140,7 @@ class LandingViewController: UIViewController, LandingViewControllerInterface {
         present(alertController, animated: true)
     }
 
+    // Filter list by section
     @IBAction func selectSection() {
         let alertController = UIAlertController(title: "Select Section",
                                                 message: nil, preferredStyle: .actionSheet)
@@ -149,6 +167,13 @@ extension LandingViewController: UITableViewDataSource {
         cell.textLabel?.text = displayedArticles[indexPath.row].title
         cell.detailTextLabel?.text = displayedArticles[indexPath.row].abstract
         return cell
+    }
+}
+
+extension LandingViewController: UITableViewDelegate {
+    func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
+        let request = Landing.SelectDetail.Request(index: indexPath.row)
+        interactor.setSelectDetail(request: request)
     }
 }
 
