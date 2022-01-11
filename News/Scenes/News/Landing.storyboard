@@ -1,0 +1,117 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<document type="com.apple.InterfaceBuilder3.CocoaTouch.Storyboard.XIB" version="3.0" toolsVersion="19162" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" useTraitCollections="YES" useSafeAreas="YES" colorMatched="YES" initialViewController="Y6W-OH-hqX">
+    <device id="retina6_1" orientation="portrait" appearance="light"/>
+    <dependencies>
+        <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="19144"/>
+        <capability name="Safe area layout guides" minToolsVersion="9.0"/>
+        <capability name="System colors in document resources" minToolsVersion="11.0"/>
+        <capability name="documents saved in the Xcode 8 format" minToolsVersion="8.0"/>
+    </dependencies>
+    <scenes>
+        <!--The New York Times-->
+        <scene sceneID="s0d-6b-0kx">
+            <objects>
+                <viewController id="Y6W-OH-hqX" customClass="LandingViewController" customModule="News" customModuleProvider="target" sceneMemberID="viewController">
+                    <view key="view" contentMode="scaleToFill" id="5EZ-qb-Rvc">
+                        <rect key="frame" x="0.0" y="0.0" width="414" height="896"/>
+                        <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
+                        <subviews>
+                            <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="dhb-JR-Dj3">
+                                <rect key="frame" x="0.0" y="88" width="414" height="94"/>
+                                <subviews>
+                                    <stackView opaque="NO" contentMode="scaleToFill" axis="vertical" translatesAutoresizingMaskIntoConstraints="NO" id="jaK-ER-J2D">
+                                        <rect key="frame" x="0.0" y="0.0" width="414" height="94"/>
+                                        <subviews>
+                                            <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="WEZ-QS-E4t">
+                                                <rect key="frame" x="0.0" y="0.0" width="414" height="50"/>
+                                                <subviews>
+                                                    <textField opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="left" contentVerticalAlignment="center" borderStyle="roundedRect" placeholder="Search" textAlignment="natural" minimumFontSize="17" translatesAutoresizingMaskIntoConstraints="NO" id="pGQ-pJ-BPe">
+                                                        <rect key="frame" x="16" y="0.0" width="382" height="42"/>
+                                                        <fontDescription key="fontDescription" type="system" pointSize="14"/>
+                                                        <textInputTraits key="textInputTraits"/>
+                                                    </textField>
+                                                </subviews>
+                                                <color key="backgroundColor" systemColor="systemBackgroundColor"/>
+                                                <constraints>
+                                                    <constraint firstItem="pGQ-pJ-BPe" firstAttribute="top" secondItem="WEZ-QS-E4t" secondAttribute="top" id="Fsq-xW-iSW"/>
+                                                    <constraint firstAttribute="trailing" secondItem="pGQ-pJ-BPe" secondAttribute="trailing" constant="16" id="fe4-Fz-QQB"/>
+                                                    <constraint firstAttribute="bottom" secondItem="pGQ-pJ-BPe" secondAttribute="bottom" constant="8" id="sRg-3M-8Hc"/>
+                                                    <constraint firstItem="pGQ-pJ-BPe" firstAttribute="leading" secondItem="WEZ-QS-E4t" secondAttribute="leading" constant="16" id="vWE-xU-YNL"/>
+                                                </constraints>
+                                            </view>
+                                            <stackView opaque="NO" contentMode="scaleToFill" distribution="fillEqually" translatesAutoresizingMaskIntoConstraints="NO" id="6HV-e9-acc">
+                                                <rect key="frame" x="0.0" y="50" width="414" height="44"/>
+                                                <subviews>
+                                                    <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="system" lineBreakMode="middleTruncation" role="primary" translatesAutoresizingMaskIntoConstraints="NO" id="JPh-8i-uuz">
+                                                        <rect key="frame" x="0.0" y="0.0" width="207" height="44"/>
+                                                        <color key="tintColor" red="0.20784313730000001" green="0.1960784314" blue="0.22352941179999999" alpha="1" colorSpace="calibratedRGB"/>
+                                                        <state key="normal" title="Button"/>
+                                                        <buttonConfiguration key="configuration" style="plain" title="1 day" subtitle="Period" titleAlignment="center">
+                                                            <fontDescription key="titleFontDescription" type="boldSystem" pointSize="14"/>
+                                                            <fontDescription key="subtitleFontDescription" type="system" weight="light" pointSize="10"/>
+                                                        </buttonConfiguration>
+                                                        <connections>
+                                                            <action selector="selectPeriod" destination="Y6W-OH-hqX" eventType="touchUpInside" id="Leg-Ob-TX0"/>
+                                                        </connections>
+                                                    </button>
+                                                    <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="system" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="XvD-PL-OhV">
+                                                        <rect key="frame" x="207" y="0.0" width="207" height="44"/>
+                                                        <color key="tintColor" red="0.20784313730000001" green="0.1960784314" blue="0.22352941179999999" alpha="1" colorSpace="calibratedRGB"/>
+                                                        <state key="normal" title="Button"/>
+                                                        <buttonConfiguration key="configuration" style="plain" title="All" subtitle="Section" titleAlignment="center">
+                                                            <fontDescription key="titleFontDescription" type="boldSystem" pointSize="14"/>
+                                                            <fontDescription key="subtitleFontDescription" type="system" weight="light" pointSize="10"/>
+                                                        </buttonConfiguration>
+                                                    </button>
+                                                </subviews>
+                                            </stackView>
+                                        </subviews>
+                                    </stackView>
+                                </subviews>
+                                <color key="backgroundColor" systemColor="systemBackgroundColor"/>
+                                <constraints>
+                                    <constraint firstItem="jaK-ER-J2D" firstAttribute="top" secondItem="dhb-JR-Dj3" secondAttribute="top" id="Bgb-gR-gGB"/>
+                                    <constraint firstAttribute="trailing" secondItem="jaK-ER-J2D" secondAttribute="trailing" id="YXe-L2-lD7"/>
+                                    <constraint firstItem="jaK-ER-J2D" firstAttribute="leading" secondItem="dhb-JR-Dj3" secondAttribute="leading" id="yfr-6i-4af"/>
+                                    <constraint firstAttribute="bottom" secondItem="jaK-ER-J2D" secondAttribute="bottom" id="zw5-cR-T7Q"/>
+                                </constraints>
+                            </view>
+                            <tableView clipsSubviews="YES" contentMode="scaleToFill" alwaysBounceVertical="YES" dataMode="prototypes" style="plain" separatorStyle="default" rowHeight="-1" estimatedRowHeight="-1" sectionHeaderHeight="-1" estimatedSectionHeaderHeight="-1" sectionFooterHeight="-1" estimatedSectionFooterHeight="-1" translatesAutoresizingMaskIntoConstraints="NO" id="QoD-yO-dhk">
+                                <rect key="frame" x="0.0" y="182" width="414" height="680"/>
+                                <color key="backgroundColor" systemColor="systemBackgroundColor"/>
+                                <inset key="separatorInset" minX="16" minY="0.0" maxX="16" maxY="0.0"/>
+                                <connections>
+                                    <outlet property="dataSource" destination="Y6W-OH-hqX" id="gRu-4v-Uxb"/>
+                                </connections>
+                            </tableView>
+                        </subviews>
+                        <viewLayoutGuide key="safeArea" id="vDu-zF-Fre"/>
+                        <color key="backgroundColor" systemColor="systemBackgroundColor"/>
+                        <constraints>
+                            <constraint firstItem="QoD-yO-dhk" firstAttribute="top" secondItem="dhb-JR-Dj3" secondAttribute="bottom" id="55V-6s-apH"/>
+                            <constraint firstItem="vDu-zF-Fre" firstAttribute="trailing" secondItem="dhb-JR-Dj3" secondAttribute="trailing" id="ERh-8B-aCQ"/>
+                            <constraint firstItem="vDu-zF-Fre" firstAttribute="bottom" secondItem="QoD-yO-dhk" secondAttribute="bottom" id="MaF-hk-8Xa"/>
+                            <constraint firstItem="dhb-JR-Dj3" firstAttribute="top" secondItem="vDu-zF-Fre" secondAttribute="top" id="Ra3-TQ-L1b"/>
+                            <constraint firstItem="vDu-zF-Fre" firstAttribute="trailing" secondItem="QoD-yO-dhk" secondAttribute="trailing" id="g7h-Sc-7AB"/>
+                            <constraint firstItem="QoD-yO-dhk" firstAttribute="leading" secondItem="vDu-zF-Fre" secondAttribute="leading" id="mc8-S5-vnQ"/>
+                            <constraint firstItem="dhb-JR-Dj3" firstAttribute="leading" secondItem="vDu-zF-Fre" secondAttribute="leading" id="z7Z-Rz-6vc"/>
+                        </constraints>
+                    </view>
+                    <navigationItem key="navigationItem" title="The New York Times" id="KNt-GD-9dp"/>
+                    <simulatedNavigationBarMetrics key="simulatedTopBarMetrics" prompted="NO"/>
+                    <connections>
+                        <outlet property="periodButton" destination="JPh-8i-uuz" id="U99-GX-XLB"/>
+                        <outlet property="tableView" destination="QoD-yO-dhk" id="FDN-cD-1J5"/>
+                    </connections>
+                </viewController>
+                <placeholder placeholderIdentifier="IBFirstResponder" id="Ief-a0-LHa" userLabel="First Responder" customClass="UIResponder" sceneMemberID="firstResponder"/>
+            </objects>
+            <point key="canvasLocation" x="-17.39130434782609" y="109.82142857142857"/>
+        </scene>
+    </scenes>
+    <resources>
+        <systemColor name="systemBackgroundColor">
+            <color white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
+        </systemColor>
+    </resources>
+</document>
